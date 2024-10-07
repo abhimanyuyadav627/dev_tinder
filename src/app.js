@@ -28,6 +28,22 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+// Request handler to update user profiles
+
+app.patch('/user', async (req, res) => {
+  try{
+    const id = req.body.id;
+    const user_info = req.body;
+    // by default validators are not run on update we need to set runValidators to true
+    const user = await User.findByIdAndUpdate(id, user_info, {returnDocument: "after", runValidators: true});
+    console.log(user);
+    res.send('User profile successfully updated');
+  } catch(err){
+
+  res.status(400).send("UPDATE FAILED:" + err.message);
+  }
+});
+
 app.use('/',(err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
